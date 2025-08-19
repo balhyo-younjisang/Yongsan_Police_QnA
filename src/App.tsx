@@ -11,7 +11,9 @@ import {
   HelpCircle,
   Sparkles,
   Heart,
-  Zap
+  Zap,
+  Menu,
+  X
 } from 'lucide-react';
 
 interface FAQItem {
@@ -122,34 +124,34 @@ const FAQItem: React.FC<{ item: FAQItem; isOpen: boolean; onToggle: () => void }
       <div className="relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
         <button
           onClick={onToggle}
-          className="w-full px-8 py-6 text-left transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50"
+          className="w-full px-4 sm:px-6 md:px-8 py-4 sm:py-6 text-left transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-lg">{item.id}</span>
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
+              <div className="relative flex-shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-sm sm:text-base md:text-lg">{item.id}</span>
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-2.5 h-2.5 text-white" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                  <Sparkles className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 text-white" />
                 </div>
               </div>
-              <div className="max-w-2xl">
-                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200 leading-relaxed">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200 leading-relaxed line-clamp-2">
                   {item.question}
                 </h3>
               </div>
             </div>
-            <div className="flex-shrink-0 ml-4">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+            <div className="flex-shrink-0 ml-2 sm:ml-4">
+              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                 isOpen 
                   ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg' 
                   : 'bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600'
               }`}>
                 {isOpen ? (
-                  <ChevronDown className="w-5 h-5" />
+                  <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                 ) : (
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 )}
               </div>
             </div>
@@ -157,12 +159,12 @@ const FAQItem: React.FC<{ item: FAQItem; isOpen: boolean; onToggle: () => void }
         </button>
         
         {isOpen && (
-          <div className="px-8 pb-6">
-            <div className="border-t border-gradient-to-r from-blue-200 to-indigo-200 pt-6">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-700 leading-relaxed text-base">{item.answer}</p>
+          <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6">
+            <div className="border-t border-gradient-to-r from-blue-200 to-indigo-200 pt-4 sm:pt-6">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 border border-blue-100">
+                <div className="flex items-start space-x-2 sm:space-x-3">
+                  <div className="w-1.5 h-1.5 sm:w-2 h-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full mt-2 flex-shrink-0"></div>
+                  <p className="text-gray-700 leading-relaxed text-sm sm:text-base">{item.answer}</p>
                 </div>
               </div>
             </div>
@@ -177,6 +179,7 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'school-violence' | 'stalking'>('school-violence');
   const [openItems, setOpenItems] = useState<Set<number>>(new Set([1]));
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleItem = (id: number) => {
     const newOpenItems = new Set(openItems);
@@ -200,98 +203,137 @@ const App: React.FC = () => {
       <header className="relative overflow-hidden bg-white shadow-lg border-b border-gray-200">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-5"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-between h-16 sm:h-20">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
-                  <Shield className="w-8 h-8 text-white" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                  <Zap className="w-3 h-3 text-white" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                  <Zap className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 text-white" />
                 </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <div className="hidden sm:block">
+                <h1 className="text-lg sm:text-sm md:text-lg font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
                   용산경찰서
                 </h1>
-                <p className="text-gray-600 font-medium">범죄 예방 Q&A</p>
+                <p className="text-gray-600 font-medium text-sm sm:text-base">범죄 예방 Q&A</p>
+              </div>
+              <div className="sm:hidden">
+                <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  용산경찰서
+                </h1>
               </div>
             </div>
-            <div className="flex items-center space-x-6">
+            
+            {/* Desktop Contact Info */}
+            <div className="hidden md:flex items-center space-x-6">
               <div className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full text-white shadow-lg">
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 <span className="font-semibold">긴급신고: 112</span>
               </div>
               <div className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full text-white shadow-lg">
-                <MessageCircle className="w-4 h-4" />
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 <span className="font-semibold">117신고센터</span>
               </div>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6 text-gray-600" />
+                ) : (
+                  <Menu className="w-6 h-6 text-gray-600" />
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200">
+              <div className="flex flex-col space-y-3">
+                <div className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full text-white shadow-lg">
+                  <Phone className="w-4 h-4" />
+                  <span className="font-semibold">긴급신고: 112</span>
+                </div>
+                <div className="flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full text-white shadow-lg">
+                  <MessageCircle className="w-4 h-4" />
+                  <span className="font-semibold">117신고센터</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full text-blue-700 font-medium mb-6">
-            <Heart className="w-5 h-5" />
-            <span>학교 폭력과 스토킹 범죄에 대한 정보를 제공해요</span>
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="inline-flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full text-blue-700 font-medium mb-4 sm:mb-6">
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base">학교 폭력과 스토킹 범죄에 대한 정보를 제공해요</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
             범죄 예방 <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">Q&A</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            학교폭력과 스토킹 범죄에 대한 전문적인 정보와 대처 방법을 제공합니다. 
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
+            학교폭력과 스토킹 범죄에 대한 전문적인 정보와 대처 방법을 제공합니다.
           </p>
         </div>
 
         {/* Search Bar */}
-        <div className="mb-12">
-          <div className="relative max-w-2xl mx-auto">
+        <div className="mb-8 sm:mb-12">
+          <div className="relative max-w-2xl mx-auto px-4">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur-lg opacity-20"></div>
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
               <input
                 type="text"
                 placeholder="질문이나 답변 내용을 검색해보세요..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-14 pr-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg shadow-lg transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                className="w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3 sm:py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-base sm:text-lg shadow-lg transition-all duration-300 bg-white/80 backdrop-blur-sm"
               />
             </div>
           </div>
         </div>
 
         {/* Category Tabs */}
-        <div className="mb-12">
-          <div className="bg-white rounded-2xl shadow-xl p-2 max-w-2xl mx-auto">
+        <div className="mb-8 sm:mb-12">
+          <div className="bg-white rounded-2xl shadow-xl p-2 max-w-2xl mx-auto mx-4">
             <nav className="flex space-x-2">
               <button
                 onClick={() => setActiveTab('school-violence')}
-                className={`flex-1 py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 ${
+                className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 rounded-xl font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 ${
                   activeTab === 'school-violence'
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                 }`}
               >
-                <div className="flex items-center justify-center space-x-3">
-                  <Shield className="w-6 h-6" />
-                  <span>학교폭력 예방</span>
+                <div className="flex items-center justify-center space-x-2 sm:space-x-3">
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                  <span className="hidden sm:inline">학교폭력 예방</span>
+                  <span className="sm:hidden">학교폭력</span>
                 </div>
               </button>
               <button
                 onClick={() => setActiveTab('stalking')}
-                className={`flex-1 py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 ${
+                className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 rounded-xl font-semibold text-sm sm:text-base md:text-lg transition-all duration-300 ${
                   activeTab === 'stalking'
                     ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
                 }`}
               >
-                <div className="flex items-center justify-center space-x-3">
-                  <Eye className="w-6 h-6" />
-                  <span>스토킹 범죄</span>
+                <div className="flex items-center justify-center space-x-2 sm:space-x-3">
+                  <Eye className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                  <span className="hidden sm:inline">스토킹 범죄</span>
+                  <span className="sm:hidden">스토킹</span>
                 </div>
               </button>
             </nav>
@@ -299,16 +341,16 @@ const App: React.FC = () => {
         </div>
 
         {/* Category Description */}
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12 px-4">
           {activeTab === 'school-violence' ? (
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-3xl p-8 text-white shadow-2xl">
-              <div className="flex items-start space-x-4">
-                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                  <Shield className="w-8 h-8 text-white" />
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white shadow-2xl">
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <Shield className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-3">학교폭력 예방을 위한 Q&A</h2>
-                  <p className="text-blue-100 text-lg leading-relaxed">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3">학교폭력 예방을 위한 Q&A</h2>
+                  <p className="text-blue-100 text-sm sm:text-base md:text-lg leading-relaxed">
                     학교폭력의 정의, 유형, 신고 방법, 대처 방법 등에 대한 자주 묻는 질문과 답변을 제공합니다. 
                     학교폭력 예방과 신속한 대응을 위한 정보를 확인하세요.
                   </p>
@@ -316,14 +358,14 @@ const App: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-3xl p-8 text-white shadow-2xl">
-              <div className="flex items-start space-x-4">
-                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                  <Eye className="w-8 h-8 text-white" />
+            <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white shadow-2xl">
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  <Eye className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-3">스토킹 범죄 Q&A</h2>
-                  <p className="text-purple-100 text-lg leading-relaxed">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3">스토킹 범죄 Q&A</h2>
+                  <p className="text-purple-100 text-sm sm:text-base md:text-lg leading-relaxed">
                     스토킹 행위의 정의, 유형, 대처 방법 등에 대한 자주 묻는 질문과 답변을 제공합니다. 
                     스토킹 범죄 예방과 피해 대응을 위한 정보를 확인하세요.
                   </p>
@@ -334,7 +376,7 @@ const App: React.FC = () => {
         </div>
 
         {/* FAQ List */}
-        <div className="space-y-6 mb-16">
+        <div className="space-y-4 sm:space-y-6 mb-12 sm:mb-16 px-4">
           {filteredFAQs.length > 0 ? (
             filteredFAQs.map((item) => (
               <FAQItem
@@ -345,56 +387,55 @@ const App: React.FC = () => {
               />
             ))
           ) : (
-            <div className="text-center py-16 bg-white rounded-3xl shadow-xl">
-              <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
-                <HelpCircle className="w-12 h-12 text-gray-400" />
+            <div className="text-center py-12 sm:py-16 bg-white rounded-2xl sm:rounded-3xl shadow-xl">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <HelpCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-gray-400" />
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-3">검색 결과가 없습니다</h3>
-              <p className="text-gray-600 text-lg">다른 검색어를 입력해보세요.</p>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-2 sm:mb-3">검색 결과가 없습니다</h3>
+              <p className="text-gray-600 text-base sm:text-lg">다른 검색어를 입력해보세요.</p>
             </div>
           )}
         </div>
 
         {/* Emergency Contact */}
-        <div className="bg-gradient-to-br from-red-500 via-pink-500 to-red-600 rounded-3xl p-8 text-white shadow-2xl">
-          <div className="flex items-center space-x-4 mb-8">
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-              <AlertTriangle className="w-8 h-8 text-white" />
+        <div className="bg-gradient-to-br from-red-500 via-pink-500 to-red-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white shadow-2xl mx-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 mb-6 sm:mb-8">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+              <AlertTriangle className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
             </div>
             <div>
-              <h3 className="text-2xl font-bold">긴급 연락처</h3>
-              <p className="text-red-100 text-lg">24시간 언제든지 연락하세요</p>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold">긴급 연락처</h3>
+              <p className="text-red-100 text-sm sm:text-base md:text-lg">24시간 언제든지 연락하세요</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-xl flex items-center justify-center">
-                  <Phone className="w-6 h-6 text-white" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-lg sm:rounded-xl flex items-center justify-center">
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-lg">긴급신고</p>
-                  <p className="text-red-100 text-2xl font-bold">112</p>
+                  <p className="font-bold text-base sm:text-lg">긴급신고</p>
+                  <p className="text-red-100 text-xl sm:text-2xl font-bold">112</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
-                  <MessageCircle className="w-6 h-6 text-white" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center">
+                  <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-lg">117신고센터</p>
-                  <p className="text-blue-100 text-2xl font-bold">117</p>
+                  <p className="font-bold text-base sm:text-lg">117신고센터</p>
+                  <p className="text-blue-100 text-xl sm:text-2xl font-bold">117</p>
                 </div>
               </div>
             </div>
-        
+         
           </div>
         </div>
       </main>
-
-     
+      
     </div>
   );
 };
